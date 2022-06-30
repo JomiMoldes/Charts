@@ -19,6 +19,7 @@ open class YAxisRenderer: NSObject, AxisRenderer
     @objc public let viewPortHandler: ViewPortHandler
     @objc public let axis: YAxis
     @objc public let transformer: Transformer?
+    open var customLabelsAttributesList = [String: [NSAttributedString.Key : Any]]()
 
     @objc public init(viewPortHandler: ViewPortHandler, axis: YAxis, transformer: Transformer?)
     {
@@ -136,10 +137,11 @@ open class YAxisRenderer: NSObject, AxisRenderer
         for i in from..<to
         {
             let text = axis.getFormattedLabel(i)
+            let attributes = customLabelsAttributesList[text] ?? [.font: labelFont, .foregroundColor: labelTextColor]
             context.drawText(text,
                              at: CGPoint(x: fixedPosition + xOffset, y: positions[i].y + offset),
                              align: textAlign,
-                             attributes: [.font: labelFont, .foregroundColor: labelTextColor])
+                             attributes: attributes)
         }
     }
     
