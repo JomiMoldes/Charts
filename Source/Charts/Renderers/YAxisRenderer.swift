@@ -23,6 +23,8 @@ import Cocoa
 @objc(ChartYAxisRenderer)
 open class YAxisRenderer: AxisRendererBase
 {
+    open var customLabelsAttributesList = [String: [NSAttributedString.Key : Any]]()
+
     @objc public init(viewPortHandler: ViewPortHandler, yAxis: YAxis?, transformer: Transformer?)
     {
         super.init(viewPortHandler: viewPortHandler, transformer: transformer, axis: yAxis)
@@ -147,13 +149,14 @@ open class YAxisRenderer: AxisRendererBase
         for i in stride(from: from, to: to, by: 1)
         {
             let text = yAxis.getFormattedLabel(i)
-            
+            let attributes = customLabelsAttributesList[text] ?? [.font: labelFont, .foregroundColor: labelTextColor]
+
             ChartUtils.drawText(
                 context: context,
                 text: text,
                 point: CGPoint(x: fixedPosition + xOffset, y: positions[i].y + offset),
                 align: textAlign,
-                attributes: [.font: labelFont, .foregroundColor: labelTextColor]
+                attributes: attributes
             )
         }
     }
